@@ -19,7 +19,7 @@
 <body>
     <div id="app">
         <button v-on:click='save'>Сохранить</button>
-		 <button v-on:click='load'>Загрузить</button>
+        <button v-on:click='load'>Загрузить</button>
         <ol>
             <li v-for='todo in todos' :key='todo.id'>
                 {{todo.title}}
@@ -76,7 +76,7 @@
                 save: function() {
                     localStorage.setItem('todos', JSON.stringify(this.todos));
                 },
-				load: function() {
+		load: function() {
                     this.todos = JSON.parse(localStorage.getItem('todos'));
                 }
             }
