@@ -19,6 +19,7 @@
 <body>
     <div id="app">
         <button v-on:click='save'>Сохранить</button>
+		 <button v-on:click='load'>Загрузить</button>
         <ol>
             <li v-for='todo in todos' :key='todo.id'>
                 {{todo.title}}
@@ -69,10 +70,14 @@
                    this.save();
                 },
                 delTodo: function(id) {
-                    //TODO: delTodo;
+                    this.todos.splice((id-1), 1);
+                    this.save();
                 },
                 save: function() {
-                    localStorage.setItem('todos', this.todos);
+                    localStorage.setItem('todos', JSON.stringify(this.todos));
+                },
+				load: function() {
+                    this.todos = JSON.parse(localStorage.getItem('todos'));
                 }
             }
         });
