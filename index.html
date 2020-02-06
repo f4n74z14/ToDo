@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To-do</title>
+    <style>
+        #app{
+             width: 300px;
+             margin: 0 auto;
+        } 
+        ol{
+            background-color: lightgray;
+            border-radius: 20px;
+            padding: 20px;
+        }
+     </style>
+</head>
+<body>
+    <div id="app">
+        <button v-on:click='save'>Сохранить</button>
+        <ol>
+            <li v-for='todo in todos' :key='todo.id'>
+                {{todo.title}}
+                <button v-on:click='delTodo(todo.id)'>Удалить</button>
+            </li>
+        </ol>
+        <label for="titleTodo">
+            Введите новое задание
+            <input type="text" name="titleTodo" id="titleTodo" placeholder="Название задания" v-model='titleTodo'>
+        </label>
+        <button v-on:click='addTodo'>Добавить</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                titleTodo: '',
+                todos: [
+                    {
+                        id: 1,
+                        title: 'Покормить собаку'
+                    },
+                    {
+                        id: 2,
+                        title: 'Купить хлеб и кепчуп'
+                    },
+                    {
+                        id: 3,
+                        title: 'Пропылесосить'
+                    },
+                    {
+                        id: 4,
+                        title: 'Todo 4'
+                    },
+                    {
+                        id: 5,
+                        title: 'Todo 5'
+                    } 
+
+                ]
+            },
+            methods: {
+                addTodo: function() {
+                   this.todos.push({id: this.todos.length+1, title: this.titleTodo}); 
+                   this.titleTodo = '';
+                   this.save();
+                },
+                delTodo: function(id) {
+                    //TODO: delTodo;
+                },
+                save: function() {
+                    localStorage.setItem('todos', this.todos);
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
