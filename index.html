@@ -5,81 +5,84 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>To-do</title>
     <style>
-        #app{
-             width: 300px;
+        #todoList{
+             width: 300px;     
              margin: 0 auto;
         } 
         ol{
             background-color: lightgray;
             border-radius: 20px;
-            padding: 10px 30px 10px 30px;
+            padding: 10px 20px 10px 20px;
+            list-style: none;
+        }
+        ol>li{
+            display: flex;
+            align-items: center;
+            margin: 10px 0 10px 0;
+            word-break: break-all;
+        }
+        ol>li>button{
+            height: 25px;   
+            width: 25px;
+            border-radius: 50%;
+            word-break: normal;
+            border: none;
+            background: white;
+            color: rgb(2, 207, 2);
+            margin-right: 10px;
         }
      </style>
 </head>
 <body>
-    <div id="app">
-        <button v-on:click='save'>Сохранить</button>
-        <button v-on:click='load'>Загрузить</button>
+    <div id="todoList">
         <ol>
-            <li v-for='todo in todos' :key='todo.id'>
+            <li v-for='todo in todos'>
+                <button v-on:click='delTodo(todo.title)'>✓</button>
                 {{todo.title}}
-                <button v-on:click='delTodo(todo.id)'>Удалить</button>
             </li>
         </ol>
-        <label for="titleTodo">
+        <label for="newTodoTitle">
             Введите новое задание
-            <input type="text" name="titleTodo" id="titleTodo" placeholder="Название задания" v-model='titleTodo'>
+            <input type="text" name="newTodoTitle" id="newTodoTitle" placeholder="Название задания" v-model.lazy.trim='newTodoTitle'>
         </label>
         <button v-on:click='addTodo'>Добавить</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
-        var app = new Vue({
-            el: '#app',
+        var todoApp = new Vue({
+            el: '#todoList',
             data: {
-                titleTodo: '',
+                newTodoTitle: '',
                 todos: [
-                    {
-                        id: 1,
-                        title: 'Покормить собаку'
-                    },
-                    {
-                        id: 2,
-                        title: 'Купить хлеб и кепчуп'
-                    },
-                    {
-                        id: 3,
-                        title: 'Пропылесосить'
-                    },
-                    {
-                        id: 4,
-                        title: 'Todo 4'
-                    },
-                    {
-                        id: 5,
-                        title: 'Todo 5'
-                    } 
-
+                    {title: 'Покормить собаку'},
+                    {title: 'Купить хлеб и кепчуп'},
+                    {title: 'Пропылесосить'}
                 ]
             },
             methods: {
                 addTodo: function() {
-                   this.todos.push({id: this.todos.length+1, title: this.titleTodo}); 
-                   this.titleTodo = '';
-                   this.save();
+                    if (this.newTodoTitle != '') {
+                         this.todos.push({title: this.newTodoTitle}); 
+                         this.newTodoTitle = '';
+                         this.save();
+                     } else {
+                        alert("Введите название задания");
+                     }
                 },
-                delTodo: function(id) {
-                    this.todos.splice((id-1), 1);
+                delTodo: function(title) {
+                    this.todos.splice(this.todos.findIndex((item) => item['title'] === title), 1);
                     this.save();
                 },
                 save: function() {
                     localStorage.setItem('todos', JSON.stringify(this.todos));
-                },
-		load: function() {
+                }
+            },
+            created: function() {
+                if (localStorage.getItem('todos') != null) {
                     this.todos = JSON.parse(localStorage.getItem('todos'));
                 }
-            }
+             }
         });
     </script>
 
